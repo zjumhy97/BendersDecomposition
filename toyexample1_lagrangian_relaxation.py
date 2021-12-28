@@ -18,13 +18,10 @@ from gurobipy import GRB
 
 def addBendersCuts(SP_Dual_obj,x):
     if SP_Dual.status == GRB.Status.UNBOUNDED:
-        # comment: only LP has UnbdRay attribute
         ray = SP_Dual.UnbdRay
         print(ray)
-        # print("Wow, Unbounded!")
         MP.addConstr(8*ray[0]+3*ray[1]+5*ray[2]+\
-                     8*ray[3]*y[0]+3*ray[4]*y[1]+\
-                     5*ray[5]*y[2]+5*ray[6]*y[3]+3*ray[7]*y[4]<=0)
+                     8*ray[3]*y[0]+3*ray[4]*y[1]+5*ray[5]*y[2]+5*ray[6]*y[3]+3*ray[7]*y[4]<=0)
     elif SP_Dual.status == GRB.Status.OPTIMAL:
         MP.addConstr(8*Vdual1[0].x+3*Vdual1[1].x+5*Vdual1[2].x+\
                      8*Vdual2[0].x*y[0]+3*Vdual2[1].x*y[1]+\
@@ -59,7 +56,6 @@ try:
     x4 = SP_Dual.addConstr(Vdual1[0]+Vdual1[2]+Vdual2[3]<=1)
     x5 = SP_Dual.addConstr(Vdual1[0]+Vdual1[1]+Vdual2[4]<=1)
 
-    # comment: this setting is to get the UnbdRay of the SP_Dual
     SP_Dual.Params.InfUnbdInfo = 1 # 这个的作用是什么？
 
     iteration = 0
